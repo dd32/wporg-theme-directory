@@ -43,14 +43,12 @@ if ( isset( $_REQUEST['style_variation'] ) ) {
 	}
 }
 
-$is_valid_url = $url && 'wp-themes.com' === wp_parse_url( $url, PHP_URL_HOST );
+$is_valid_url = (bool) $url;
 
 // Initial state to pass to Interactivity API.
 $init_state = [
-	'isLoaded' => ! $is_valid_url,
 	'url' => $url,
 	'permalink' => $permalink,
-	'previewBase' => $theme->preview_url,
 	'selected' => $selected,
 	'label' => array(
 		'postNavigate' => __( 'Theme preview frame updated.', 'wporg-themes' ),

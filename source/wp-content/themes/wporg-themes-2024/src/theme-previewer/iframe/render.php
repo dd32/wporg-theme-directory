@@ -18,7 +18,7 @@ if ( isset( $_REQUEST['device'] ) && in_array( $_REQUEST['device'], $devices ) )
 }
 
 $url = $attributes['url'];
-$is_valid_url = $url && 'wp-themes.com' === wp_parse_url( $url, PHP_URL_HOST );
+$is_valid_url = (bool) $url;
 
 $classes = array();
 $notice = '';
@@ -94,6 +94,7 @@ $encoded_state = wp_json_encode( $init_state );
 			data-wp-style--width="state.iframeWidthCSS"
 			data-wp-style--height="state.iframeHeightCSS"
 			data-wp-on--load="wporg/themes/preview::actions.onLoad"
-		></iframe>
+			data-wp-init="wporg/themes/preview::actions.startPlayground"
+		/>
 	<?php endif; ?>
 </div>
