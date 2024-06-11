@@ -52,7 +52,10 @@ store( 'wporg/themes/preview', {
 			permalinkURL.search = params.toString();
 
 			// context.url = previewURL;
-			playgroundClient.goTo( '/?' + params.toString() );
+			pendingPlaygroundUrl = '/?' + params.toString();
+			if ( playgroundClient ) {
+				playgroundClient.goTo( pendingPlaygroundUrl );
+			}
 			window.history.replaceState( {}, '', permalinkURL );
 		},
 		startPlayground() {
@@ -68,6 +71,9 @@ store( 'wporg/themes/preview', {
 					blueprint: blueprint
 				}).then( ( playground ) => {
 					playgroundClient = playground;
+					if ( pendingPlaygroundUrl ) {
+						playgroundClient.goTo( pendingPlaygroundUrl );
+					}
 				});
 			} );
 		},
