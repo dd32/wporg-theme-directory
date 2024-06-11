@@ -48,6 +48,7 @@ $is_valid_url = (bool) $url;
 // Initial state to pass to Interactivity API.
 $init_state = [
 	'url' => $url,
+	'theme' => $theme_post->post_name,
 	'permalink' => $permalink,
 	'selected' => $selected,
 	'label' => array(
