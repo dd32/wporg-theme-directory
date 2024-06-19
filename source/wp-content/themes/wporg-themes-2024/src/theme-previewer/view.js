@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { getContext, store } from '@wordpress/interactivity';
+import { getContext, getElement, store } from '@wordpress/interactivity';
 import { startPlaygroundWeb } from 'https://playground.wordpress.net/client/index.js'; // or '@wp-playground/client';
 
 let playgroundClient = false;
@@ -26,8 +26,11 @@ store( 'wporg/themes/preview', {
 			const isSelected = 'wporg-select' === event.type;
 			if ( ! ref?.dataset ) {
 				return;
+			}
 
-			context.isLoaded = false;
+			if ( ! playgroundClient ) {
+				context.isLoaded = false;
+			}
 			if ( ref.dataset.style_variation ) {
 				context.selected.style_variation = isSelected ? ref.dataset.style_variation : null;
 			}
@@ -61,6 +64,9 @@ store( 'wporg/themes/preview', {
 		startPlayground() {
 			const context = getContext();
 			const { ref } = getElement();
+
+			// Set it as immediately loaded..
+			context.isLoaded = true;
 
 			fetch( 'https://wordpress.org/themes/wp-json/themes/v1/preview-blueprint/' + context.theme )
 			.then( ( response ) => response.json() )
