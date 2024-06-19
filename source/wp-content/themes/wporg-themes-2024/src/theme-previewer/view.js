@@ -28,9 +28,7 @@ store( 'wporg/themes/preview', {
 				return;
 			}
 
-			if ( ! playgroundClient ) {
-				context.isLoaded = false;
-			}
+			context.isLoaded = false;
 			if ( ref.dataset.style_variation ) {
 				context.selected.style_variation = isSelected ? ref.dataset.style_variation : null;
 			}
@@ -57,7 +55,7 @@ store( 'wporg/themes/preview', {
 			// context.url = previewURL;
 			pendingPlaygroundUrl = '/?' + params.toString();
 			if ( playgroundClient ) {
-				playgroundClient.goTo( pendingPlaygroundUrl );
+				playgroundClient.goTo( pendingPlaygroundUrl ).then( () => context.isLoaded = false );
 			}
 			window.history.replaceState( {}, '', permalinkURL );
 		},
@@ -78,7 +76,7 @@ store( 'wporg/themes/preview', {
 				}).then( ( playground ) => {
 					playgroundClient = playground;
 					if ( pendingPlaygroundUrl ) {
-						playgroundClient.goTo( pendingPlaygroundUrl );
+						playgroundClient.goTo( pendingPlaygroundUrl ).then( () => context.isLoaded = false );
 					}
 				});
 			} );
