@@ -33,13 +33,15 @@ const { state } = store( 'wporg/themes/theme-settings', {
 				return;
 			}
 			const newUrl = inputEl.value;
+			const newBlueprint = event.target.elements.blueprint?.value || '';
+
 			state.isSubmitting = true;
 			try {
 				const key = 'commercial' === type ? 'supportURL' : 'repositoryURL';
 				const response = yield wp.apiFetch( {
 					path: '/themes/v1/theme/' + slug + '/' + type,
 					method: 'POST',
-					data: { [ key ]: newUrl },
+					data: { [ key ]: newUrl, blueprint: newBlueprint },
 				} );
 				if ( typeof response[ key ] === 'undefined' ) {
 					throw new Error( 'Invalid response from API.' );
