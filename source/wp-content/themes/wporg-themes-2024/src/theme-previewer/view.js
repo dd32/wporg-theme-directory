@@ -77,6 +77,7 @@ store( 'wporg/themes/preview', {
 				}
 
 				// If the blueprint wasn't preloaded, fetch it.
+				// TODO: wp.apiFetch. not enqueued.
 				fetch( 'https://wordpress.org/themes/wp-json/themes/v1/preview-blueprint/' + context.theme ).then(
 					( response ) => response.text()
 				).then(
