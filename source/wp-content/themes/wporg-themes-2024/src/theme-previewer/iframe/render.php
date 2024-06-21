@@ -7,7 +7,7 @@ if ( ! $current_post_id ) {
 	return;
 }
 
-$using_playground = $_REQUEST['playground'] ?? false;
+$is_playground = $_REQUEST['playground'] ?? false;
 
 $theme_post = get_post( $block->context['postId'] );
 $theme = wporg_themes_theme_information( $theme_post->post_name );
@@ -71,7 +71,7 @@ $encoded_state = wp_json_encode( $init_state );
 		title="<?php esc_attr_e( 'Theme preview', 'wporg-themes' ); ?>"
 		data-wp-style--width="state.iframeWidthCSS"
 		data-wp-style--height="state.iframeHeightCSS"
-		<?php if ( $using_playground ) { ?>
+		<?php if ( $is_playground ) { ?>
 			data-wp-init="wporg/themes/preview::actions.startPlayground"
 		<?php } else { ?>
 			src="<?php echo esc_url_raw( $attributes['url'] ); ?>"

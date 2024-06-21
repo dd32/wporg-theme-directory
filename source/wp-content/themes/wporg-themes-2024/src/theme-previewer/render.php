@@ -7,6 +7,8 @@ if ( ! $current_post_id ) {
 	return;
 }
 
+$is_playground = $_REQUEST['playground'] ?? false;
+
 // Manually enqueue this script, so that it's available for the interactivity view script.
 wp_enqueue_script( 'wp-a11y' );
 
@@ -43,13 +45,14 @@ if ( isset( $_REQUEST['style_variation'] ) ) {
 	}
 }
 
-$is_valid_url = (bool) $url;
-
 // Initial state to pass to Interactivity API.
 $init_state = [
+	'isLoaded' => false,
+	'isPlayground' => $is_playground,
 	'url' => $url,
 	'theme' => $theme_post->post_name,
 	'permalink' => $permalink,
+	'previewBase' => $theme->preview_url,
 	'selected' => $selected,
 	'label' => array(
 		'postNavigate' => __( 'Theme preview frame updated.', 'wporg-themes' ),
