@@ -40,13 +40,10 @@ if ( 'community' === $model_type ) {
 	$labels['form_help'] = __( 'Optional. The URL for theme support, other than its support forum on wordpress.org.', 'wporg-themes' );
 }
 
-$blueprint = wp_json_encode( $theme_post->blueprint, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
-
 // Initial state to pass to Interactivity API.
 $init_state = [
 	'slug' => $theme_post->post_name,
 	'type' => $model_type,
-	'blueprint' => $blueprint,
 	'url' => $url,
 	'labels' => [
 		'success' => __( 'URL saved correctly!', 'wporg-themes' ),
@@ -79,23 +76,6 @@ $encoded_state = wp_json_encode( $init_state );
 				data-wp-on--keydown="actions.onChange"
 			/>
 			<p class="wporg-theme-settings__form-help" id="wporg-theme-settings__form-help"><?php echo esc_html( $labels['form_help'] ); ?></p>
-		</div>
-		<!-- TODO: This only shows when the theme has a model assigned for now. -->
-		<div class="wporg-theme-settings__blueprint-field">
-			<label for="wporg-theme-settings-blueprint"><?php
-				_e( 'Theme Preview Blueprint', 'wporg-themes' )
-			?></label>
-			<textarea
-				id="wporg-theme-settings-blueprint"
-				aria-describedby="wporg-theme-settings__blueprint-help"
-				name="blueprint"
-				rows="10"
-				data-wp-text="context.blueprint"
-				data-wp-on--keydown="actions.onChange"
-			><?php esc_textarea( $blueprint ); ?></textarea>
-			<p class="wporg-theme-settings__blueprint-help" id="wporg-theme-settings__blueprint-help"><?php
-				echo 'This is a work in progress, and not currently supported.';
-			?></p>
 		</div>
 		<div class="wporg-theme-settings__button wp-block-button is-small">
 			<button

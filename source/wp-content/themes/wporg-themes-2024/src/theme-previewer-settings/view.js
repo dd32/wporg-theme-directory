@@ -3,13 +3,17 @@
  */
 import { getContext, store } from '@wordpress/interactivity';
 
-const { state } = store( 'wporg/themes/theme-settings', {
+const { state } = store( 'wporg/themes/theme-previewer-settings', {
 	state: {
 		isError: false,
 		isSuccess: false,
+		isInvalid: false,
 		isSubmitting: false,
 		get resultMessage() {
 			const { labels } = getContext();
+			if ( state.isInvalid ) {
+				return labels.invalid;
+			}
 			if ( state.isSuccess ) {
 				return labels.success;
 			}
@@ -23,31 +27,36 @@ const { state } = store( 'wporg/themes/theme-settings', {
 		onChange() {
 			state.isSuccess = false;
 			state.isError = false;
+			state.isInvalid = false;
 		},
 		*onSubmit( event ) {
 			event.preventDefault();
-			const context = getContext();
-			const { type, slug, url } = context;
-			const inputEl = event.target.elements.url;
-			if ( ! inputEl ) {
+			const context       = getContext();
+			const { slug, blueprint } = context;
+			const newBlueprint  = event.target.elements.blueprint?.value || '';
+
+			try {
+				const decoded = JSON.parse( newBlueprint );
+				if ( typeof decoded !== 'object' || ! decoded.steps ) {
+					throw new Exception( 'Invalid blueprint.' );
+				}
+			} catch( error ) {
+				state.isInvalid = true;
 				return;
 			}
-			const newUrl = inputEl.value;
+
 			state.isSubmitting = true;
 			try {
-				const key = 'commercial' === type ? 'supportURL' : 'repositoryURL';
 				const response = yield wp.apiFetch( {
-					path: '/themes/v1/theme/' + slug + '/' + type,
+					path: '/themes/v1/preview-blueprint/' + slug,
 					method: 'POST',
-					data: { [ key ]: newUrl },
+					data: { blueprint: newBlueprint },
 				} );
-				if ( typeof response[ key ] === 'undefined' ) {
+				if ( typeof response.steps === 'undefined' ) {
 					throw new Error( 'Invalid response from API.' );
 				}
-				context.url = response[ key ];
 				state.isSuccess = true;
 			} catch ( error ) {
-				inputEl.value = url;
 				state.isError = true;
 			}
 			state.isSubmitting = false;
