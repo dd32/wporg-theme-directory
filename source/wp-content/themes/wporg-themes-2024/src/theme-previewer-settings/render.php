@@ -8,8 +8,13 @@ $theme_post = get_post( $block->context['postId'] );
 
 // Not blueprint enabled, or the user is not an owner/admin.
 if (
-	( ! $theme_post->preview_blueprint && empty( $_GET['playground'] ) ) ||
-	! current_user_can( 'edit_post', $theme_post->ID )
+	(
+		! $theme_post->preview_blueprint &&
+		empty( $_GET['playground'] )
+	) || (
+		! current_user_can( 'edit_post', $theme_post->ID ) &&
+		get_current_user_id() !== $theme_post->post_author
+	)
 ) {
 	return;
 }
