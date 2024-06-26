@@ -7,7 +7,7 @@ if ( ! $current_post_id ) {
 	return;
 }
 
-$is_playground = (bool) ( $_REQUEST['playground'] ?? false );
+$is_playground = (bool) ( $_REQUEST['playground-preview'] ?? false );
 
 // Manually enqueue this script, so that it's available for the interactivity view script.
 wp_enqueue_script( 'wp-a11y' );
@@ -21,7 +21,7 @@ $selected = array();
 
 $blueprint = '';
 if ( $is_playground ) {
-	$permalink    = add_query_arg( [ 'playground' => 1 ], $permalink );
+	$permalink    = add_query_arg( [ 'playground-preview' => 1 ], $permalink );
 	$blueprint    = wp_json_encode(
 		rest_get_server()->response_to_data(
 			rest_do_request(
