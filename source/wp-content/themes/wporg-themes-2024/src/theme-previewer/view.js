@@ -71,36 +71,19 @@ store( 'wporg/themes/preview', {
 			// The loading overlay doesn't play nicely with the low latency of playground.
 			context.isLoaded = true;
 
-			(new Promise( (resolve) => {
-				if ( context.blueprint ) {
-					return resolve();
+			startPlaygroundWeb({
+				iframe: ref,
+				remoteUrl: 'https://playground.wordpress.net/remote.html',
+				blueprint: JSON.parse( context.blueprint )
+			}).then( ( playground ) => {
+				playgroundClient = playground;
+
+				// If the preview URL has any query params, head straight there.
+				const currentPreviewURL = new URL( context.url );
+				if ( currentPreviewURL.searchParams.size ) {
+					playgroundClient.goTo( '/?' + currentPreviewURL.searchParams.toString() );
 				}
-
-				// If the blueprint wasn't preloaded, fetch it.
-				// TODO: wp.apiFetch. not enqueued.
-				fetch( 'https://wordpress.org/themes/wp-json/themes/v1/preview-blueprint/' + context.theme ).then(
-					( response ) => response.text()
-				).then(
-					( response ) => {
-						context.blueprint = response;
-						resolve()
-					}
-				)
-			} ) ).then( ( blueprint ) => {
-				startPlaygroundWeb({
-					iframe: ref,
-					remoteUrl: 'https://playground.wordpress.net/remote.html',
-					blueprint: JSON.parse( context.blueprint )
-				}).then( ( playground ) => {
-					playgroundClient = playground;
-
-					// If the preview URL has any query params, head straight there.
-					const currentPreviewURL = new URL( context.url );
-					if ( currentPreviewURL.searchParams.size ) {
-						playgroundClient.goTo( '/?' + currentPreviewURL.searchParams.toString() );
-					}
-				});
-			} );
+			});
 		},
 	},
 } );

@@ -7,10 +7,10 @@ if ( ! $current_post_id ) {
 	return;
 }
 
-$is_playground = (bool) ( $_REQUEST['playground-preview'] ?? false );
-
 // Manually enqueue this script, so that it's available for the interactivity view script.
 wp_enqueue_script( 'wp-a11y' );
+
+$is_playground = (bool) ( $_REQUEST['playground-preview'] ?? false );
 
 $theme_post = get_post( $block->context['postId'] );
 $theme = wporg_themes_theme_information( $theme_post->post_name );
@@ -21,8 +21,8 @@ $selected = array();
 
 $blueprint = '';
 if ( $is_playground ) {
-	$permalink    = add_query_arg( [ 'playground-preview' => 1 ], $permalink );
-	$blueprint    = wp_json_encode(
+	$permalink = add_query_arg( [ 'playground-preview' => 1 ], $permalink );
+	$blueprint = wp_json_encode(
 		rest_get_server()->response_to_data(
 			rest_do_request(
 				new WP_REST_Request(
