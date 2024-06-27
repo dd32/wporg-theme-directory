@@ -55,11 +55,14 @@ store( 'wporg/themes/preview', {
 				params.entries().forEach( ( [ key, value ] ) => { playgroundParams.set( key, value ); } );
 
 				playgroundClient.goTo( '/?' + playgroundParams.toString() );
+
+				// Ensure the current page url remains as a playground.
+				params.set('playground-preview', '1');
 			}
 
 			const permalinkURL = new URL( context.permalink );
 			params.delete( 'page_id' );
-			params.entries().forEach( ( [ key, value ] ) => { permalinkURL.searchParams.set( key, value ); } );
+			permalinkURL.search = params.toString();
 
 			window.history.replaceState( {}, '', permalinkURL );
 		},
