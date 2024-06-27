@@ -569,14 +569,10 @@ function wporg_themes_get_feature_list( $include = 'active', $subset = '' ) {
 /**
  * Get the list of patterns from wp-themes.com API.
  */
-function get_theme_patterns( $theme_name ) {
-	if ( is_string( $post ) ) {
-		$post = ( new \WPORG_Themes_Repo_Package( $post ) )->wp_post;
-	}
-
+function get_theme_patterns( $post ) {
 	$patterns = get_post_meta( $post->ID, 'theme_patterns', true );
 	if ( ! is_array( $patterns ) ) {
-		$patterns = update_cached_stheme_patterns( $post->ID );
+		$patterns = update_cached_theme_patterns( $post->ID );
 	}
 
 	return $patterns;
@@ -586,10 +582,6 @@ function get_theme_patterns( $theme_name ) {
  * Get the list of style variations from wp-themes.com API.
  */
 function get_theme_style_variations( $post ) {
-	if ( is_string( $post ) ) {
-		$post = ( new \WPORG_Themes_Repo_Package( $post ) )->wp_post;
-	}
-
 	$styles = get_post_meta( $post->ID, 'style_variations', true );
 	if ( ! is_array( $styles ) ) {
 		$styles = update_cached_style_variations( $post->ID );
