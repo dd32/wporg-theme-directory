@@ -31,8 +31,11 @@ function get_style_variation_card( $style ) {
 		$preview_link = add_query_arg( 'style_variation', $style->title, $style->preview_base );
 	}
 
+	$cache_buster = '20241028'; // To break out of cached image.
+	$view_url = add_query_arg( 'v', $cache_buster, $style->preview_link );
+
 	$args = array(
-		'src' => $style->preview_link,
+		'src' => $view_url,
 		// translators: %s pattern name.
 		'alt' => sprintf( __( 'Style: %s', 'wporg-themes' ), $style->title ),
 		'href' => $preview_link,
