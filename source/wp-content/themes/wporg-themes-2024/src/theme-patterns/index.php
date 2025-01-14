@@ -23,7 +23,7 @@ function init() {
  * Convert a pattern object into a screenshot preview block.
  */
 function get_pattern_preview_block( $pattern, $is_overflow = false, $is_selected = false ) {
-	$cache_buster = '20240522'; // To break out of cached image.
+	$cache_buster = '20250114'; // To break out of cached image.
 	$view_url = add_query_arg( 'v', $cache_buster, $pattern->preview_link );
 
 	$args = array(
